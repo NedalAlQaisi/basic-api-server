@@ -4,7 +4,7 @@ const express = require("express");
 const { Food } = require("../models/index.js");
 const router = express.Router();
 
-router.post("/food", addFood);
+router.put("/food", addFood);
 router.get("/food", getFood);
 router.get("/food/:id", getFoodById);
 router.put("/food/:id", updateFood);

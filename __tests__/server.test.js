@@ -3,6 +3,15 @@
 const supertest = require("supertest");
 const server = require("../src/server.js");
 const request = supertest(server.app);
+const { db } = require('../src/models/index.js')
+
+beforeAll (async () => {
+    await db.sync()
+}) 
+
+afterAll  (async () => {
+    await db.drop()
+}) 
 
 describe("testing server", () => {
 
@@ -21,8 +30,8 @@ describe("testing server", () => {
         expect(response.status).toEqual(200);
     });
 
-    it("testing 201 on with post", async () => {
-        const response = await request.post("/food").send({ foodName: 'Kabsah', dishSize: 'main dish' });
+    it("testing 201 on with put", async () => {
+        const response = await request.put("/food").send({ foodName: 'Kabsah', dishSize: 'main dish' });
         expect(response.status).toEqual(201);
     });
 
