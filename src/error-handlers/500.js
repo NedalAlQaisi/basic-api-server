@@ -2,6 +2,6 @@
 
 module.exports = (error, req, res, next) => {
 
-    res.status(505).json({ code: 505, message: "Server have error" })
+    res.status(500).json({ code: 500, message: "Server have error" })
 
 }

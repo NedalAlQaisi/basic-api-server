@@ -1,16 +1,15 @@
 "use strict";
 
 const express = require("express");
-
 const { Food } = require("../models/index.js");
-
 const router = express.Router();
 
 router.post("/food", addFood);
 router.get("/food", getFood);
-router.get("/food/:id", getOneFood);
+router.get("/food/:id", getFoodById);
 router.put("/food/:id", updateFood);
-router.delete("/food/:id", deleteOneFood);
+router.delete("/food/:id", deleteFood);
+
 
 
 async function addFood(req, res) {
@@ -19,32 +18,34 @@ async function addFood(req, res) {
     res.status(201).json(addedFood);
 }
 
-
 async function getFood(req, res) {
-    let food = await Food.findAll();
+    let food = await Food.get();
     res.status(200).json(food);
 }
 
-
-async function getOneFood(req, res) {
+async function getFoodById(req, res) {
     let id = parseInt(req.params.id);
-    let food = await Food.findOne({ where: { id: id } });
-    res.status(200).json(food);
+    let foodAskedFor = await Food.get(id);
+    res.status(200).json(foodAskedFor);
 }
+
+
 
 
 async function updateFood(req, res) {
-    let id = parseInt(req.params.id);
-    let reqBody = req.body;
-    await Food.update(reqBody, { where: { id: id } });
-    res.status(201).json(await Food.findOne({ where: { id: id } }));
+    let body = req.body;
+    let id = req.params.id;
+
+    const UpdatedFood = await Food.update(body, id);
+    res.status(201).json(UpdatedFood);
 }
 
 
-async function deleteOneFood(req, res) {
+async function deleteFood(req, res) {
     let id = parseInt(req.params.id);
-    await Food.destroy({ where: { id: id } });
-    res.status(200).send(await Food.findOne({ where: { id: id } }));
+    let deletedFood = await Food.delete(id);
+    res.status(204).json(deletedFood);
 }
+
 
 module.exports = router;

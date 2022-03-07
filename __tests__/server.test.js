@@ -4,44 +4,38 @@ const supertest = require("supertest");
 const server = require("../src/server.js");
 const request = supertest(server.app);
 
-describe("Test the server", () => {
+describe("testing server", () => {
 
-    it("Test the 404 in error path", async () => {
+    it("testing 404 on bad path", async () => {
         const response = await request.get("/perso");
         expect(response.status).toEqual(404);
     });
 
-    it("Test the 404 in error method", async () => {
+    it("testing 404 on bad method", async () => {
         const response = await request.delete("/person");
         expect(response.status).toEqual(404);
     });
 
-    it("Test the 200 with GET", async () => {
+    it("testing 200 with GET", async () => {
         const response = await request.get("/person");
         expect(response.status).toEqual(200);
     });
 
-    it("Test the 200 with GET and param", async () => {
+    it("testing 201 on with post", async () => {
+        const response = await request.post("/food").send({ foodName: 'Kabsah', dishSize: 'main dish' });
+        expect(response.status).toEqual(201);
+    });
+
+    it("testing 200 with GET and param", async () => {
         const response = await request.get("/person/1");
         expect(response.status).toEqual(200);
     });
-
-    it("Test the 201 with put", async () => {
+    it("testing 201 with put", async () => {
         const response = await request.put("/person/1").send({ firstName: 'Nedal', lastName: 'AL-Qaisi' });
         expect(response.status).toEqual(201);
     });
-
-
-
-
-    it("Test the 201 on with post", async () => {
-        const response = await request.post("/food").send({ name: 'Kapsah', type: 'Favorite food' });
-        expect(response.status).toEqual(201);
-    });
-
-
-    it("Test the 201 with Delete", async () => {
-        const response = await request.delete('/food/1');
+    it("testing 201 with Delete", async () => {
+        const response = await request.delete('/person/1');
         expect(response.status).toEqual(200);
     })
 });
